@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,17 @@
 			background-repeat: no-repeat;
 			background-image: linear-gradient(-45deg, #9cdcec, #9cb4ec, #ac9cec, #d49cec, #ec9cdc);
 		}
+
 		#to-do {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 		}
+
 		#task-add-container {
 			margin: 20px;
 		}
+
 		#to-do-list {
 			width: 70%;
 			padding: 30px;
@@ -26,6 +30,7 @@
 			background-color: rgba(65, 65, 65, 0.226);
 			margin: 10px;
 		}
+
 		.to-do-item {
 			display: flex;
 			flex-direction: row;
@@ -36,12 +41,14 @@
 			border-radius: 6px;
 			margin: 10px
 		}
+
 		button {
 			font-size: 14px;
 			padding: 10px;
 			border-radius: 6px;
 			border: 1px solid black;
 		}
+
 		input {
 			height: 32px;
 			width: 350px;
@@ -51,21 +58,93 @@
 		/* Eventlisteners over on-event functions: 
 			Enter why you think one of them is better over the other.
 		*/
+		// because it is more readable and easier to understand and we can change what happens when the button is clicked directly from the javascript file instead of going to the html file and changing the onclick function.
 		window.addEventListener('load', () => {
-			/* 
-			Task:
-			Define the functions of each interactible field as per the given instructions.
-				a. The Task Input field should add the text (if any) in it to the to-do list on clicking "Enter" while typing.
-				b. The "Add Task" button must do the same as above.
-				c. On clicking the "Check" button, the span contaiing the task text will have a class 
-				`checked` added/removed as per the original condition.
-				d. On clicking the "Delete" button, the to-do item will be removed from the list.
-				e. On clicking "Export", the whole To-Do list will be copied to the clipboard. Each item will be separated by a newline.
-				Note: If a task is completed, it will be enclosed between two tilde (~). For Example: ~~Bully Goose for Work~~
-			*/
+			const taskInput = document.getElementById('task-input');
+			const addTaskButton = document.getElementById('add-task');
+			const toDoList = document.getElementById('to-do-list');
+			const exportButton = document.getElementById('export');
+
+			//Task:
+			//Define the functions of each interactible field as per the given instructions.
+			//a. The Task Input field should add the text (if any) in it to the to-do list on clicking "Enter" while typing.
+			const addTask = (taskText) => {
+				if (taskText.trim() === "") return;
+
+				const toDoItem = document.createElement('div');
+				toDoItem.className = 'to-do-item';
+
+				const taskSpan = document.createElement('span');
+				taskSpan.className = 'task-text';
+				taskSpan.textContent = taskText;
+
+				const buttonsDiv = document.createElement('div');
+				buttonsDiv.className = 'buttons';
+				const checkButton = document.createElement('button');
+				checkButton.className = 'check-item-button';
+				checkButton.textContent = 'Check';
+				checkButton.onclick = () => {
+					
+					if (taskSpan.textContent.startsWith('~~') && taskSpan.textContent.endsWith('~~')) {
+					
+						taskSpan.textContent = taskSpan.textContent.slice(2, -2); 
+					} else {
+					
+						taskSpan.textContent = `~~${taskSpan.textContent}~~`; 
+					}
+				};
+
+				const deleteButton = document.createElement('button');
+				deleteButton.className = 'delet-item-button';
+				deleteButton.textContent = 'Delete';
+				deleteButton.onclick = () => {
+					toDoList.removeChild(toDoItem);
+				};
+
+				buttonsDiv.appendChild(checkButton);
+				buttonsDiv.appendChild(deleteButton);
+				toDoItem.appendChild(taskSpan);
+				toDoItem.appendChild(buttonsDiv);
+				toDoList.appendChild(toDoItem);
+
+				taskInput.value = ""; 
+			};
+
+			//b. The "Add Task" button must do the same as above.
+			addTaskButton.onclick = () => {
+				addTask(taskInput.value);
+			};
+
+			taskInput.addEventListener('keypress', (event) => {
+				if (event.key === 'Enter') {
+					addTask(taskInput.value);
+				}
+			});
+			//c. On clicking the "Check" button, the span contaiing the task text will have a class 
+			//`checked` added/removed as per the original condition.
+
+			//d. On clicking the "Delete" button, the to-do item will be removed from the list.
+
+			//e. On clicking "Export", the whole To-Do list will be copied to the clipboard. Each item will be separated by a newline.
+			exportButton.onclick = () => {
+				const tasks = Array.from(document.querySelectorAll('.to-do-item'));
+				const exportText = tasks.map(item => {
+					const taskText = item.querySelector('.task-text');
+					return taskText.classList.contains('checked') ? `~~${taskText.textContent}~~` : taskText.textContent;
+				}).join('\n');
+
+				navigator.clipboard.writeText(exportText).then(() => {
+					alert('To-Do list copied to clipboard!');
+				}).catch(err => {
+					console.error('Could not copy text: ', err);
+				});
+			};
+			//Note: If a task is completed, it will be enclosed between two tilde (~). For Example: ~~Bully Goose for Work~~
+
 		});
 	</script>
 </head>
+
 <body>
 	<div id="root">
 		<!-- Task 1 HTML -->
@@ -78,21 +157,21 @@
 				<div class="to-do-item">
 					<span class="task-text"> Finish Javascript Tasks </span>
 					<div class="buttons">
-						<button class="check-item-button"> Check  </button>
+						<button class="check-item-button"> Check </button>
 						<button class="delet-item-button"> Delete </button>
 					</div>
 				</div>
 				<div class="to-do-item">
 					<span class="task-text"> Finish React Tutorials </span>
 					<div class="buttons">
-						<button class="check-item-button"> Check  </button>
+						<button class="check-item-button"> Check </button>
 						<button class="delet-item-button"> Delete </button>
 					</div>
 				</div>
 				<div class="to-do-item">
 					<span class="task-text"> Get Treat from Ankan </span>
 					<div class="buttons">
-						<button class="check-item-button"> Check  </button>
+						<button class="check-item-button"> Check </button>
 						<button class="delet-item-button"> Delete </button>
 					</div>
 				</div>
@@ -101,4 +180,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

@@ -55,7 +55,38 @@
 		2. Define a function `changeColor` such that the background color of the div with the id `tile` changes on click
 		The background color of the div goes on a loop, defined by the array `colorList`.
 		*/
-		const colorList = ['red', 'cyan', 'green', 'blue', 'yellow', 'teal', 'brown'];
+
+
+
+		const switchOnOff = () => {
+				const button = event.target;
+				if (button.classList.contains("button-off")) {
+					button.classList.replace("button-off", "button-on");
+					button.innerText = "On";
+				} else {
+					button.classList.replace("button-on", "button-off");
+					button.innerText = "Off";
+				}
+			};
+		
+			const SwitchOnOff = (x) => {
+				if(x.classList.contains("button-off")){
+					x.classList.replace("button-off", "button-on");
+					x.innerText = "On";
+				}else{
+					x.classList.replace("button-on", "button-off");
+					x.innerText = "Off";
+				}
+				}
+			
+			const colorList = ['red', 'teal', 'green', 'blue', 'black', 'orange', 'pink'];
+	
+			const changeColor = () => {
+				const tile = document.getElementById("tile");
+				const index = colorList.indexOf(tile.style.backgroundColor);
+				tile.style.backgroundColor = colorList[(index + 1) % colorList.length];
+			};
+	
 	</script>
 </head>
 <body>

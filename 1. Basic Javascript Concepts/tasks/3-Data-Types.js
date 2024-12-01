@@ -8,20 +8,21 @@ Task:
 let out;
 
 out = 42;
-// type:
-// typeof output:
+// type:integer
+// typeof output:number
 out = 3.1416;
-// type:
-// typeof output:
+// type: float
+// typeof output: number
 out = 'Manga';
-// type:
-// typeof output:
+// type: string
+// typeof output: string
 out = false;
-// type:
-// typeof output:
+// type: boolean
+// typeof output: boolean
 out = null;
-// type:
-// typeof output:
+// type: object
+// typeof output: object
+
 out = undefined;
 // type:
 // typeof output:

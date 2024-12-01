@@ -19,10 +19,18 @@ const accountSheet = [
 
 accountSheet.forEach(({ name, balance }) => {
 	// Edit the code over here
-	if (condition) {
+	if (balance>=50) {
 	// Do not edit the code until mentioned
 		console.log(name);
 	} 
+	else if(balance<15)
+	{
+console.log(name,'is broke AF.');
+	}
+	else
+	{
+console.log(balance);
+	}
 	// Continue editing the code after this
 
 	// Do not edit the code beyond this point.

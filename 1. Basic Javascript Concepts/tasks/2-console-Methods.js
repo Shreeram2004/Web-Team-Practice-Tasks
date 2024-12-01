@@ -44,20 +44,20 @@ let family = {
 
 // Edit the code beyond this point.
 
-// console.clear()
+//  console.clear();
 
 /*
-	What changed 
+If we uncomment `console.clear`, it will clear the console . But it should be written after `console.log` and `console.dir`	
 */
 
 // console.log(family);
 
 /*
-	State the output observed
+We can see the Javascript object "family" in console
 */
 
-// console.dir(family, { depth: null });
+//console.dir(family, { depth: null });
 
 /*
-	Note your observations on what has changed.
+We can see the nested Javascript object "family" in console in detail
 */

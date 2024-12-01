@@ -11,3 +11,47 @@ Task:
 */
 
 // Write your code over here. Make sure to comment before each part.
+
+console.log('\n');
+//for displaying squares of numbers
+console.log('squares of numbers from 1 to 10');
+for(let i=1;i<=10;i++)
+{
+	let a=i*i;
+	console.log(' square of',i,'is',a);
+}
+
+console.log('\n');
+
+//for displaying the number and its factorial
+console.log('the number and its factorial');
+let fact = 1;
+let n = 1;
+while (1) {
+	let i = n;
+	fact = 1;
+	while (i >= 1) {
+		fact *= i;
+		i--;
+	}
+	if (fact < 2023) {
+		console.log(n, '!', '=', fact);
+	}
+	else {
+		break;
+	}
+	n++;
+
+}
+
+
+console.log('\n');
+
+//defining variable v with value 0 and defining a loop which atleast runs once
+console.log('variable v with value 0 and defining a loop which atleast runs once');
+let v=0;
+while(v>=0)
+{
+	console.log(v);
+	v--;
+}

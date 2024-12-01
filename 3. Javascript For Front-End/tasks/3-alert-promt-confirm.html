@@ -32,14 +32,32 @@
 		/*
 		Task: 
 		1. Define a function `hello()` which gets called when the button "Say Hello" is clicked.
-        It'll give an alert saying "Hello from MASK"
-
-        2. Define a function `choose(ele)` which will set the innerHTML of the div with ID `information` to "So you like `choice`..... hmmmmmmmm".
-        When the function is called, it'll only change the text if user confirms his action. (Use the confirm popup box).
-
-        3. Define a function `submitName()` which will show a promt to the user "Enter your name".
+        It'll give an alert saying "Hello from MASK"*/
+  function hello() {
+			alert("Hello from MASK");
+		}
+        
+        /*2. Define a function `choose(ele)` which will set the innerHTML of the div with ID `information` to "So you like `choice`..... hmmmmmmmm".
+        When the function is called, it'll only change the text if user confirms his action. (Use the confirm popup box).*/
+        function choose(ele) {
+			let choice = ele.innerHTML; 
+			let confirmed = confirm(`Are you sure you like ${choice}?`);
+			if (confirmed) {
+				document.getElementById("favourite").innerHTML = `So you like ${choice}..... hmmmmmmmm`;
+				document.getElementById("favourite").style.display = "block";
+			}
+		}
+       /* 3. Define a function `submitName()` which will show a promt to the user "Enter your name".
         If the user fills the name, display "Hello `name`, Welcome to the club" in the div with ID `info`.
         */
+        function submitName() {
+			const name = prompt("Enter your name");
+			if (name) {
+				document.getElementById("info").innerHTML = `Hello ${name}, Welcome to the club`;
+				document.getElementById("info").style.display = "block";
+			}
+		}
+       
 	</script>
 </head>
 <body>
