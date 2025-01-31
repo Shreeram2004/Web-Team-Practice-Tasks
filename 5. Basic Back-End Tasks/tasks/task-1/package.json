@@ -1,0 +1,15 @@
+{
+  "name": "web-team-practice-tasks",
+  "version": "1.0.0",
+  "description": "This repository will serve as a list of topics to cover as well as provide a set of sample tasks for applying the same concepts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
