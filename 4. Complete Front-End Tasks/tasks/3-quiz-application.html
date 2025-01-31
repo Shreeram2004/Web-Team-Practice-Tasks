@@ -23,3 +23,561 @@
 	Your task will be judged on the functioning of the application and the styling of the components. A very show-off or glamorous interface is not what we expect,
 	but just a neat user interface using which is not a hassle is well-appreciated. That being said, the 
 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #instructions, #results {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 500px;
+            text-align: center;
+        }
+        #quiz-container {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: 1000px;
+            text-align: center;
+            position: relative;
+        }
+        .right-panel {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        #timer {
+            font-size: 1.2em;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        #question-container {
+            margin-bottom: 20px;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+        #options-container {
+            margin-bottom: 20px;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+        .option label {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            cursor: pointer;
+        }
+        .option input {
+            margin-right: 10px;
+        }
+        #navigation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #navigation button, #submit-quiz, #mark-for-review {
+            margin: 5px;
+        }
+        #nav-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left; 
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        #nav-panel .status-labels-container {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #nav-panel .status-labels div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #nav-panel .status-labels div::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        #nav-panel .status-notvisited::before {
+            background-color: grey;
+        }
+        #nav-panel .status-notanswered::before {
+            background-color: red;
+        }
+        #nav-panel .status-answered::before {
+            background-color: green;
+        }
+        #nav-panel .status-marked::before {
+            background-color: purple;
+        }
+        #nav-panel .status-answered-and-marked::before {
+            background-color: blue;
+        }
+        #nav-panel .question-numbers {
+            margin-top: 20px;
+        }
+        #nav-panel .question-numbers h3 {
+            margin-bottom: 10px;
+        }
+        #nav-panel .question-numbers button {
+            margin: 2px;
+            padding: 5px 10px;
+            width: 40px;
+            height: 40px;
+            transition: box-shadow 0.2s, background-color 0.2s, transform 0.2s;
+        }
+        #nav-panel .selected {
+            box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+            transform: scale(1.1);
+        }
+        #nav-panel .answered {
+            background-color: green;
+            color: white;
+        }
+        #nav-panel .unanswered {
+            background-color: red;
+            color: white;
+        }
+        #nav-panel .notvisited {
+            background-color: grey;
+            color: white;
+        }
+        #nav-panel .saved-for-later {
+            background-color: purple;
+            color: white;
+        }
+        #nav-panel .answered-and-saved {
+            background-color: blue;
+            color: white;
+        }
+        #nav-panel .answered-and-marked {
+            background-color: orange;
+            color: white;
+        }
+        #results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #results-table th, #results-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #results-table th {
+            background-color: #f2f2f2;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .right-panel {
+                top: 10px;
+                right: 20px;
+                text-align: right;
+                margin-top: 0;
+            }
+            #navigation {
+                justify-content: flex-start;
+                margin-top: 0;
+            }
+        }
+        @media (max-width: 767px) {
+            #timer {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+            .right-panel {
+                position: static;
+                transform: none;
+                margin-top: 20px;
+            }
+            #nav-panel {
+                order: 1;
+                margin-top: 20px;
+                width: 100%;
+                padding: 10px;
+            }
+            #nav-panel .question-numbers button {
+                width: 30px;
+                height: 30px;
+                padding: 3px 5px;
+            }
+            #question-container, #options-container {
+                width: 100%;
+                padding: 10px;
+            }
+            #submit-quiz {
+                order: 2;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="instructions">
+        <h1>Quiz Instructions</h1>
+        <p>Welcome to the quiz! You will have 5 minutes to complete 10 questions. Select the correct option for each question and submit your answers at the end.</p>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <div id="quiz-container" style="display: none;">
+        <div class="right-panel">
+            <div id="timer">Time Remaining: <span id="time">05:00</span></div>
+            <div id="nav-panel">
+                <div class="status-labels-container">
+                    <h3>Status Labels</h3>
+                    <div class="status-labels">
+                        <div class="status-notvisited">Not Visited</div>
+                        <div class="status-notanswered">Not Answered</div>
+                        <div class="status-answered">Answered</div>
+                        <div class="status-marked">Marked for Review</div>
+                        <div class="status-answered-and-marked">Answered and Marked for Review</div>
+                    </div>
+                </div>
+                <div class="question-numbers">
+                    <h3>Question Numbers</h3>
+                    <div id="question-buttons"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div>
+                <div id="question-container"></div>
+                <div id="options-container"></div>
+                <div id="navigation">
+                    <button onclick="prevQuestion()">Previous</button>
+                    <button onclick="nextQuestion()">Next</button>
+                    <button id="mark-for-review" onclick="saveForLater()">Mark for Review</button>
+                    <button onclick="clearSelection()">Clear Selection</button>
+                </div>
+            </div>
+        </div>
+        <button id="submit-quiz" onclick="submitQuiz()" disabled>Submit Quiz</button>
+    </div>
+
+    <div id="results" style="display: none;">
+        <h1>Quiz Results</h1>
+        <p>Total Correct Answers: <span id="correct-answers"></span></p>
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Your Answer</th>
+                    <th>Correct Answer</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 1,
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Lisbon"],
+                correct: "Paris"
+            },
+            {
+                number: 2,
+                question: "Who wrote 'To Kill a Mockingbird'?",
+                options: ["Harper Lee", "Mark Twain", "J.K. Rowling", "Ernest Hemingway"],
+                correct: "Harper Lee"
+            },
+            {
+                number: 3,
+                question: "What is the smallest planet in our solar system?",
+                options: ["Earth", "Mars", "Mercury", "Venus"],
+                correct: "Mercury"
+            },
+            {
+                number: 4,
+                question: "What is the powerhouse of the cell?",
+                options: ["Nucleus", "Ribosome", "Mitochondria", "Chloroplast"],
+                correct: "Mitochondria"
+            },
+            {
+                number: 5,
+                question: "What year did the Titanic sink?",
+                options: ["1912", "1905", "1920", "1898"],
+                correct: "1912"
+            },
+            {
+                number: 6,
+                question: "What is the largest mammal?",
+                options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+                correct: "Blue Whale"
+            },
+            {
+                number: 7,
+                question: "Who painted the Mona Lisa ?",
+                options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+                correct: "Leonardo da Vinci"
+            },
+            {
+                number: 8,
+                question: "What is the main ingredient in guacamole?",
+                options: ["Tomato", "Onion", "Avocado", "Pepper"],
+                correct: "Avocado"
+            },
+            {
+                number: 9,
+                question: "What is the chemical symbol for gold?",
+                options: ["Au", "Ag", "Pb", "Fe"],
+                correct: "Au"
+            },
+            {
+                number: 10,
+                question: "Who is known as the 'Father of Computers'?",
+                options: ["Charles Babbage", "Alan Turing", "John von Neumann", "Bill Gates"],
+                correct: "Charles Babbage"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedAnswers = new Array(questions.length).fill(null);
+        let visitedQuestions = new Array(questions.length).fill(false);
+        let savedForLater = new Array(questions.length).fill(false);
+        let timer;
+        let timeLeft = 300; // 5 minutes in seconds
+
+        function startQuiz() {
+            document.getElementById("instructions").style.display = "none";
+            document.getElementById("quiz-container").style.display = "block";
+            displayNavPanel();
+            displayQuestion();
+            startTimer();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    submitQuiz();
+                } else {
+                    timeLeft--;
+                    document.getElementById("time").innerText = formatTime(timeLeft);
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayNavPanel() {
+            const navPanel = document.getElementById("nav-panel");
+            navPanel.innerHTML = `
+                <div class="status-labels-container">
+                    <h3>Status Labels</h3>
+                    <div class="status-labels">
+                        <div class="status-notvisited">Not Visited</div>
+                        <div class="status-notanswered">Not Answered</div>
+                        <div class="status-answered">Answered</div>
+                        <div class="status-marked">Marked for Review</div>
+                        <div class="status-answered-and-marked">Answered and Marked for Review</div>
+                    </div>
+                </div>
+                <div class="question-numbers">
+                    <h3>Question Numbers</h3>
+                    <div id="question-buttons"></div>
+                </div>
+            `;
+            const questionButtons = document.getElementById("question-buttons");
+            questionButtons.innerHTML = questions.map((question, index) => `
+                <button id="nav-button-${index}" onclick="navigateToQuestion(${index})">${question.number}</button>
+            `).join('');
+            updateNavPanel();
+        }
+
+        function updateNavPanel() {
+            questions.forEach((_, index) => {
+                const navButton = document.getElementById(`nav-button-${index}`);
+                navButton.classList.remove("selected", "answered", "unanswered", "notvisited", "saved-for-later", "answered-and-saved", "answered-and-marked");
+
+                if (index === currentQuestionIndex) {
+                    navButton.classList.add("selected");
+                } else if (selectedAnswers[index] !== null && savedForLater[index]) {
+                    navButton.classList.add("answered-and-saved");
+                } else if (savedForLater[index]) {
+                    navButton.classList.add("saved-for-later");
+                } else if (selectedAnswers[index] !== null) {
+                    navButton.classList.add("answered");
+                } else if (visitedQuestions[index]) {
+                    navButton.classList.add("unanswered");
+                } else {
+                    navButton.classList.add("notvisited");
+                }
+            });
+            checkAllQuestionsVisited();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionContainer = document.getElementById("question-container");
+            const optionsContainer = document.getElementById("options-container");
+            questionContainer.innerHTML = `
+                <h2>Question ${question.number}</h2>
+                <p>${question.question}</p>
+            `;
+            optionsContainer.innerHTML = question.options.map((option, index) => `
+                <div class="option">
+                    <label>
+                        <input type="radio" id="option${index}" name="option" value="${option}" ${selectedAnswers[currentQuestionIndex] === option ? 'checked' : ''}>
+                        ${option}
+                    </label>
+                </div>
+            `).join('');
+            visitedQuestions[currentQuestionIndex] = true;
+            updateNavPanel();
+        }
+
+        function nextQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            saveAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function clearSelection() {
+            selectedAnswers[currentQuestionIndex] = null;
+            displayQuestion();
+        }
+
+        function saveAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                selectedAnswers[currentQuestionIndex] = selectedOption.value;
+            }
+            updateNavPanel();
+        }
+
+        function saveForLater() {
+            visitedQuestions[currentQuestionIndex] = true;
+            savedForLater[currentQuestionIndex] = true;
+            updateNavPanel();
+            nextQuestion();
+        }
+
+        function navigateToQuestion(index) {
+            saveAnswer();
+            currentQuestionIndex = index;
+            displayQuestion();
+        }
+
+        function submitQuiz() {
+            saveAnswer();
+            clearInterval(timer);
+            document.getElementById("quiz-container").style.display = "none";
+            document.getElementById("results").style.display = "block";
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsTableBody = document.getElementById("results-table").querySelector("tbody");
+            let correctAnswersCount = 0;
+
+            resultsTableBody.innerHTML = questions.map((question, index) => {
+                const isCorrect = selectedAnswers[index] === question.correct;
+                if (isCorrect) correctAnswersCount++;
+                return `
+                    <tr>
+                        <td>${question.question}</td>
+                        <td>${selectedAnswers[index] || 'Not Answered'}</td>
+                        <td>${question.correct}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById("correct-answers").innerText = correctAnswersCount;
+        }
+
+        function checkAllQuestionsVisited() {
+            const allVisited = visitedQuestions.every(visited => visited);
+            document.getElementById("submit-quiz").disabled = !allVisited;
+        }
+    </script>
+</body>
+</html>
